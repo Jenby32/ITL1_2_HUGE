@@ -1,0 +1,6 @@
+{
+    "require": {
+        "panique/huge": "^3.3",
+        "gregwar/captcha-bundle": "^2.2"
+    }
+}
