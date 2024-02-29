@@ -16,6 +16,12 @@ class LoginModel
      *
      * @return bool success state
      */
+
+     
+    public static function isAdmin() {
+        return Session::get('user_account_type') == 7;
+    }
+
     public static function login($user_name, $user_password, $set_remember_me_cookie = null)
     {
         // we do negative-first checks here, for simplicity empty username and empty password in one line

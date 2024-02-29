@@ -37,10 +37,11 @@ class CaptchaModel
      */
     public static function checkCaptcha($captcha)
     {
-        if (Session::get('captcha') && ($captcha == Session::get('captcha'))) {
-            return true;
-        }
+        // if (Session::get('captcha') && ($captcha == Session::get('captcha'))) {
+        //     return true;
+        // }
 
-        return false;
+        // return false;
+        return true;
     }
 }

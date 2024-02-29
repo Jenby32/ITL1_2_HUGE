@@ -205,10 +205,11 @@ class RegistrationModel
         $database = DatabaseFactory::getFactory()->getConnection();
 
         // write new users data into database
-        $sql = "INSERT INTO users (user_name, user_password_hash, user_email, user_creation_timestamp, user_activation_hash, user_provider_type)
-                    VALUES (:user_name, :user_password_hash, :user_email, :user_creation_timestamp, :user_activation_hash, :user_provider_type)";
+        $sql = "INSERT INTO users (user_name, user_active, user_password_hash, user_email, user_creation_timestamp, user_activation_hash, user_provider_type)
+                    VALUES (:user_name, :user_active, :user_password_hash, :user_email, :user_creation_timestamp, :user_activation_hash, :user_provider_type)";
         $query = $database->prepare($sql);
         $query->execute(array(':user_name' => $user_name,
+                              ':user_active' => true,
                               ':user_password_hash' => $user_password_hash,
                               ':user_email' => $user_email,
                               ':user_creation_timestamp' => $user_creation_timestamp,
@@ -248,21 +249,23 @@ class RegistrationModel
      */
     public static function sendVerificationEmail($user_id, $user_email, $user_activation_hash)
     {
-        $body = Config::get('EMAIL_VERIFICATION_CONTENT') . Config::get('URL') . Config::get('EMAIL_VERIFICATION_URL')
-                . '/' . urlencode($user_id) . '/' . urlencode($user_activation_hash);
+        // $body = Config::get('EMAIL_VERIFICATION_CONTENT') . Config::get('URL') . Config::get('EMAIL_VERIFICATION_URL')
+        //         . '/' . urlencode($user_id) . '/' . urlencode($user_activation_hash);
 
-        $mail = new Mail;
-        $mail_sent = $mail->sendMail($user_email, Config::get('EMAIL_VERIFICATION_FROM_EMAIL'),
-            Config::get('EMAIL_VERIFICATION_FROM_NAME'), Config::get('EMAIL_VERIFICATION_SUBJECT'), $body
-        );
+        // $mail = new Mail;
+        // $mail_sent = $mail->sendMail($user_email, Config::get('EMAIL_VERIFICATION_FROM_EMAIL'),
+        //     Config::get('EMAIL_VERIFICATION_FROM_NAME'), Config::get('EMAIL_VERIFICATION_SUBJECT'), $body
+        // );
 
-        if ($mail_sent) {
-            Session::add('feedback_positive', Text::get('FEEDBACK_VERIFICATION_MAIL_SENDING_SUCCESSFUL'));
-            return true;
-        } else {
-            Session::add('feedback_negative', Text::get('FEEDBACK_VERIFICATION_MAIL_SENDING_ERROR') . $mail->getError() );
-            return false;
-        }
+        // if ($mail_sent) {
+        //     Session::add('feedback_positive', Text::get('FEEDBACK_VERIFICATION_MAIL_SENDING_SUCCESSFUL'));
+        //     return true;
+        // } else {
+        //     Session::add('feedback_negative', Text::get('FEEDBACK_VERIFICATION_MAIL_SENDING_ERROR') . $mail->getError() );
+        //     return false;
+        // }
+
+        return true;
     }
 
     /**

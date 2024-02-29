@@ -22,9 +22,7 @@ class RegisterController extends Controller
      */
     public function index()
     {
-        if (LoginModel::isUserLoggedIn()) {
-            Redirect::home();
-        } else {
+        if (LoginModel::isUserLoggedIn() && LoginModel::isAdmin()) {
             $this->View->render('register/index');
         }
     }
@@ -67,8 +65,4 @@ class RegisterController extends Controller
      * moment the end-user requests the <img .. >
      * Maybe refactor this sometime.
      */
-    public function showCaptcha()
-    {
-        CaptchaModel::generateAndShowCaptcha();
-    }
 }
