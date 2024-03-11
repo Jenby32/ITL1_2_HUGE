@@ -13,7 +13,7 @@
             or suspend a user.
         </div>
         <div>
-            <table class="overview-table">
+            <table class="overview-table dataTable">
                 <thead>
                 <tr>
                     <td>Id</td>
@@ -23,6 +23,7 @@
                     <td>Activated ?</td>
                     <td>Link to user's profile</td>
                     <td>suspension Time in days</td>
+                    <td>Account Type</td>
                     <td>Soft delete</td>
                     <td>Submit</td>
                 </tr>
@@ -43,6 +44,13 @@
                         </td>
                         <form action="<?= config::get("URL"); ?>admin/actionAccountSettings" method="post">
                             <td><input type="number" name="suspension" /></td>
+                            <td>
+                                <select id="acctype" name="acctype">
+                                    <?php foreach ($this->roles as $role) {
+                                        echo '<option value="'.$role->RoleId.'">'.$role->Role.'</option>';
+                                    }?>
+                                </select>
+                            </td>
                             <td><input type="checkbox" name="softDelete" <?php if ($user->user_deleted) { ?> checked <?php } ?> /></td>
                             <td>
                                 <input type="hidden" name="user_id" value="<?= $user->user_id; ?>" />

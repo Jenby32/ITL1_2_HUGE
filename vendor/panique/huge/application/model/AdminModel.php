@@ -12,7 +12,7 @@ class AdminModel
      * @param $softDelete
      * @param $userId
      */
-    public static function setAccountSuspensionAndDeletionStatus($suspensionInDays, $softDelete, $userId)
+    public static function setAccountSuspensionAndDeletionStatus($suspensionInDays, $acctype ,$softDelete, $userId)
     {
 
         // Prevent to suspend or delete own account.
@@ -36,7 +36,7 @@ class AdminModel
         }
 
         // write the above info to the database
-        self::writeDeleteAndSuspensionInfoToDatabase($userId, $suspensionTime, $delete);
+        self::writeDeleteAndSuspensionInfoToDatabase($userId, $acctype,$suspensionTime, $delete);
 
         // if suspension or deletion should happen, then also kick user out of the application instantly by resetting
         // the user's session :)
@@ -53,13 +53,14 @@ class AdminModel
      * @param $delete
      * @return bool
      */
-    private static function writeDeleteAndSuspensionInfoToDatabase($userId, $suspensionTime, $delete)
+    private static function writeDeleteAndSuspensionInfoToDatabase($userId, $acctype,$suspensionTime, $delete)
     {
         $database = DatabaseFactory::getFactory()->getConnection();
 
-        $query = $database->prepare("UPDATE users SET user_suspension_timestamp = :user_suspension_timestamp, user_deleted = :user_deleted  WHERE user_id = :user_id LIMIT 1");
+        $query = $database->prepare("UPDATE users SET user_suspension_timestamp = :user_suspension_timestamp, user_account_type = :user_account_type,user_deleted = :user_deleted  WHERE user_id = :user_id LIMIT 1");
         $query->execute(array(
                 ':user_suspension_timestamp' => $suspensionTime,
+                ':user_account_type'=> $acctype,
                 ':user_deleted' => $delete,
                 ':user_id' => $userId
         ));
