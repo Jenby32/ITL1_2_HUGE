@@ -20,6 +20,22 @@ class NoteModel
 
         // fetchAll() is the PDO method that gets all result rows
         return $query->fetchAll();
+        // $sql = "SELECT user_id, note_id, note_text FROM notes WHERE user_id = ?";
+
+        // // Prepare the statement
+        // $query = $database->prepare($sql);
+
+        // // Bind parameters
+        // $query->bind_param("i", Session::get('user_id')); // 'i' steht für Integer
+
+        // // Execute the query
+        // $query->execute();
+
+        // // Holen des Resultats
+        // $result = $query->get_result();
+
+        // // Rückgabe aller Ergebnisreihen
+        // return $result->fetch_all(MYSQLI_ASSOC);
     }
 
     /**

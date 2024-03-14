@@ -37,10 +37,16 @@ class UserModel
             $all_users_profiles[$user->user_id]->user_name = $user->user_name;
             $all_users_profiles[$user->user_id]->user_email = $user->user_email;
             $all_users_profiles[$user->user_id]->user_active = $user->user_active;
+            
             $sql = "SELECT Role FROM account_type WHERE RoleId = " .$user->user_account_type. ";";
             $query1 = $database->prepare($sql);
             $query1->execute();
-            $all_users_profiles[$user->user_id]->user_account_type = $query1->fetch()->Role;
+            $fetched_data = $query1->fetch()->Role;
+            if($fetched_data == 'Admin' || $fetched_data == 'User') {
+                $all_users_profiles[$user->user_id]->user_account_type = $fetched_data;
+            } else {
+                $all_users_profiles[$user->user_id]->user_account_type = 'Gast';
+            }
             $all_users_profiles[$user->user_id]->user_deleted = $user->user_deleted;
             $all_users_profiles[$user->user_id]->user_avatar_link = (Config::get('USE_GRAVATAR') ? AvatarModel::getGravatarLinkByEmail($user->user_email) : AvatarModel::getPublicAvatarFilePathOfUser($user->user_has_avatar, $user->user_id));
         }
@@ -94,8 +100,12 @@ class UserModel
         // application/core/Filter.php for more info on how to use. Removes (possibly bad) JavaScript etc from
         // the user's values
         array_walk_recursive($user, 'Filter::XSSFilter');
-
-        return $user;
+        if ($user->user_account_type == '7' || $user->user_account_type == '2') {
+            return $user;
+        } else {
+            $user->user_account_type = '1';
+            return $user;
+        }
     }
 
     /**
@@ -106,6 +116,8 @@ class UserModel
     public static function getUserDataByUserNameOrEmail($user_name_or_email)
     {
         $database = DatabaseFactory::getFactory()->getConnection();
+        
+
 
         $query = $database->prepare("SELECT user_id, user_name, user_email FROM users
                                      WHERE (user_name = :user_name_or_email OR user_email = :user_name_or_email)
@@ -113,6 +125,8 @@ class UserModel
         $query->execute(array(':user_name_or_email' => $user_name_or_email, ':provider_type' => 'DEFAULT'));
 
         return $query->fetch();
+
+
     }
 
     /**

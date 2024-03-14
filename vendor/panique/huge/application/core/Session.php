@@ -118,6 +118,33 @@ class Session
             $userSessionId = !empty($result)? $result->session_id: null;
 
             return $session_id !== $userSessionId;
+            // $sql = "SELECT session_id FROM users WHERE user_id = ? LIMIT 1";
+
+            // // Prepare the statement
+            // $query = $database->prepare($sql);
+
+            // // Bind parameters
+            // $query->bind_param("i", $userId); // 'i' steht für Integer, da user_id normalerweise eine numerische Spalte ist
+
+            // // Execute the query
+            // $query->execute();
+
+            // // Fetch the result
+            // $query->store_result(); // Stellt sicher, dass das Ergebnis gespeichert wird, damit rowCount() später funktioniert
+            // $query->bind_result($session_id); // Bindet das Ergebnis an eine Variable
+
+            // // Fetch the session_id
+            // $query->fetch();
+
+            // // Überprüfen, ob ein Ergebnis gefunden wurde
+            // $userSessionId = $query->num_rows > 0 ? $session_id : null;
+
+            // // Freigeben von Ressourcen
+            // $query->free_result();
+            // $query->close();
+
+            // // Vergleichen der Session-IDs und Rückgabe des Ergebnisses
+            // return $session_id !== $userSessionId;
         }
 
         return false;
