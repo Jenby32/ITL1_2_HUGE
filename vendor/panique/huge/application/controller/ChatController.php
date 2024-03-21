@@ -1,6 +1,7 @@
 <?php
 
 class ChatController extends Controller {
+
     public function __construct() {
         parent::__construct();
     }
@@ -10,7 +11,7 @@ class ChatController extends Controller {
      */
     public function index()
     {
-        $this->View->render('chat/index');
+        $this->View->render('chat/index', array("messages" => [], 'users' => ChatModel::showButtonForUsers()));
     }
 
     /**
@@ -19,23 +20,41 @@ class ChatController extends Controller {
      * POST request.
      */
     public function send() {
+        global $currentReceiver;
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $messageText = Request::post('message_text');
-            $receiverId = Request::post('user_id_receiver');
-            echo $messageText. "    ". $receiverId;
-            
+            $receiverId = $currentReceiver;
+            echo $currentReceiver;
+
+            echo "ReceiverId: ".$receiverId;
             ChatModel::sendMessage($messageText, $receiverId);
+            $messages = ChatModel::getMessagesForUser($this->currentReceiver);
+            $this->View->render('chat/index', array(
+                'messages' => $messages, 'users' => ChatModel::showButtonForUsers()));
         } else {
             echo "fehler";
         }
     }
 
     public function getMessages() {
+        global $currentReceiver;
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $receiverId = Request::post('receiver_id');
+            $receiverName = Request::post('receiver_id');
+            $database = DatabaseFactory::getFactory()->getConnection();
+
+
+            $sql1 = "SELECT user_id FROM users WHERE user_name = :receiverName LIMIT 1";
+            $query1 = $database->prepare($sql1);
+            $query1->execute(array(':receiverName' => $receiverName));
+            $receiver = $query1->fetch();
             
+            $currentReceiver = $receiver->user_id;
+            echo $currentReceiver;
+            // echo json_encode($receiverId->user_id);
+            $messages = ChatModel::getMessagesForUser($currentReceiver);
+            // echo Session::get('user_id');
             $this->View->render('chat/index', array(
-                                            'messages' => ChatModel::getMessagesForUser($receiverId)));
+                                            'messages' => $messages, 'users' => ChatModel::showButtonForUsers()));
         } else {
             echo "fehler";
         }
