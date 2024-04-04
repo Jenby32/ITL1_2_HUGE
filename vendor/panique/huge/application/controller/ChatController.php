@@ -23,12 +23,9 @@ class ChatController extends Controller {
         global $currentReceiver;
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $messageText = Request::post('message_text');
-            $receiverId = $currentReceiver;
-            echo $currentReceiver;
-
-            echo "ReceiverId: ".$receiverId;
+            $receiverId = Session::get("currentReceiver");
             ChatModel::sendMessage($messageText, $receiverId);
-            $messages = ChatModel::getMessagesForUser($this->currentReceiver);
+            $messages = ChatModel::getMessagesForUser($receiverId);
             $this->View->render('chat/index', array(
                 'messages' => $messages, 'users' => ChatModel::showButtonForUsers()));
         } else {
@@ -49,7 +46,8 @@ class ChatController extends Controller {
             $receiver = $query1->fetch();
             
             $currentReceiver = $receiver->user_id;
-            echo $currentReceiver;
+            Session::set("currentReceiver", $currentReceiver);
+            echo Session::get("currentReceiver");
             // echo json_encode($receiverId->user_id);
             $messages = ChatModel::getMessagesForUser($currentReceiver);
             // echo Session::get('user_id');
