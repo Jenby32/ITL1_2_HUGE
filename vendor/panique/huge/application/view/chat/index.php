@@ -8,10 +8,6 @@
                 echo '<input type="submit" name="receiver_id" value="'.$user->user_name.'" autocomplete="off">';
             } ?>
         </form>
-        <form method="post" action="<?php echo Config::get('URL');?>chat/send">
-                    <label>Message </label><input type="text" name="message_text" />
-                    <input type="submit" value='Send Message' autocomplete="off" />
-        </form>
         <div class="card">
             <?php foreach($this->messages as $message) {?>
                 <?php if($message["user_id"] == Session::get("user_id")) {?>
@@ -29,5 +25,9 @@
                 <?php } ?>
             <?php } ?>
         </div>
+        <form method="post" action="<?php echo Config::get('URL');?>chat/send">
+                    <label>Message </label><input type="text" name="message_text" />
+                    <input type="submit" value='Send Message' autocomplete="off" />
+        </form>
     </div>
 </div>

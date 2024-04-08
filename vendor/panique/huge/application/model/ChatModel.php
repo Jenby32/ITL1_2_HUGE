@@ -6,9 +6,7 @@ class ChatModel {
         if (!empty($message_text) && !empty($receiver_id)) {
             $user_id_sender = Session::get('user_id'); 
             
-            
             $sql = "INSERT INTO messages (user_id_sender, user_id_receiver, message) VALUES (:user_id_sender, :user_id_receiver, :message)";
-            
             
             $query = $database->prepare($sql);
             
@@ -26,7 +24,7 @@ class ChatModel {
                 echo "Fehler beim Senden der Nachricht!";
             }
         } else {
-            echo "sdfdsffdsdf";
+            echo "Fehler";
         }
         
         Session::add('feedback_negative', Text::get('FEEDBACK_NOTE_CREATION_FAILED'));
@@ -50,19 +48,17 @@ class ChatModel {
             return strtotime($a['timestamp_col']) - strtotime($b['timestamp_col']);
         });
 
-        // usort($chat, function($a, $b) {
-        //     return $a->timestamp_col <=> $b->timestamp_col;
-        // });
 
         return $chat;
     }
 
     public static function showButtonForUsers() {
         $database = DatabaseFactory::getFactory()->getConnection();
+        $currentUser = Session::get('user_id');
 
-        $sql = "SELECT user_id, user_name FROM users";
+        $sql = "SELECT user_id, user_name FROM users WHERE NOT user_id = :currentUserId";
         $query = $database->prepare($sql);
-        $query->execute();
+        $query->execute(array(':currentUserId' => $currentUser));
 
         $users = $query->fetchAll();
         
