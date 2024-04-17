@@ -11,22 +11,20 @@ class GalleryController extends Controller {
      */
     public function index()
     {
+        // $imgs = readfile(GalleryModel::showPictures());
+        // echo var_dump($imgs);
         $this->View->render('gallery/index', array());
     }
 
     public function saveFile() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $file = $_FILES['myfile'];
-            $targetDirectory = "../galFolder/";
-            $targetFile = $targetDirectory . basename($file['name']);
-            if (move_uploaded_file($file['tmp_name'], $targetFile)) {
-                echo "Die Datei " . htmlspecialchars(basename($file['name'])) . " wurde erfolgreich hochgeladen.";
-                $this->View->render('gallery/index', array());
-            } else {
-                $this->View->render('gallery/index', array());
-                echo "Es gab einen Fehler beim Hochladen der Datei.";
-            }
-            
-        }
+        GalleryModel::savePicture();
+        $this->View->render('gallery/index', array());
+    }
+
+    public function showFiles() {
+        $filepath = '../galFolder/Titelbild.jpg';
+        readfile($filepath);
+        // echo "<img src='". $imgs ."'></img>";
+        // $this->View->render('gallery/index', array('images' -> $imgs));
     }
 }

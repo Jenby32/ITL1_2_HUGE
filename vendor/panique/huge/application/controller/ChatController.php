@@ -11,7 +11,7 @@ class ChatController extends Controller {
      */
     public function index()
     {
-        $this->View->render('chat/index', array("messages" => [], 'users' => ChatModel::showButtonForUsers()));
+        $this->View->render('chat/index', array("messages" => [], 'users' => ChatModel::showButtonForUsers(), 'unreadMessages' => ChatModel::getUnreadMessages(Session::get("user_id"))));
     }
 
     /**
@@ -20,14 +20,15 @@ class ChatController extends Controller {
      * POST request.
      */
     public function send() {
-        global $currentReceiver;
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $messageText = Request::post('message_text');
             $receiverId = Session::get("currentReceiver");
+
             ChatModel::sendMessage($messageText, $receiverId);
+
             $messages = ChatModel::getMessagesForUser($receiverId);
             $this->View->render('chat/index', array(
-                'messages' => $messages, 'users' => ChatModel::showButtonForUsers()));
+                'messages' => $messages, 'users' => ChatModel::showButtonForUsers(), 'unreadMessages' => ChatModel::getUnreadMessages(Session::get("user_id"))));
         } else {
             echo "fehler";
         }
@@ -52,7 +53,7 @@ class ChatController extends Controller {
             $messages = ChatModel::getMessagesForUser($currentReceiver);
             // echo Session::get('user_id');
             $this->View->render('chat/index', array(
-                                            'messages' => $messages, 'users' => ChatModel::showButtonForUsers()));
+                                            'messages' => $messages, 'users' => ChatModel::showButtonForUsers(), 'unreadMessages' => ChatModel::getUnreadMessages(Session::get("user_id"))));
         } else {
             echo "fehler";
         }

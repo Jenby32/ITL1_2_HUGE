@@ -6,4 +6,10 @@
             <input type="submit" name="save" autocomplete="off">upload</input>
         </form>
     </div>
+    </br>
+    <div>
+        <?php 
+        echo var_dump($images);
+        ?>
+    </div>
 </div>
