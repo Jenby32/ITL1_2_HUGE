@@ -13,7 +13,8 @@ class GalleryController extends Controller {
     {
         // $imgs = readfile(GalleryModel::showPictures());
         // echo var_dump($imgs);
-        $this->View->render('gallery/index', array());
+        
+        $this->View->render('gallery/index', array("images" => GalleryModel::getPictures()));
     }
 
     public function saveFile() {
@@ -21,10 +22,7 @@ class GalleryController extends Controller {
         $this->View->render('gallery/index', array());
     }
 
-    public function showFiles() {
-        $filepath = '../galFolder/Titelbild.jpg';
-        readfile($filepath);
-        // echo "<img src='". $imgs ."'></img>";
-        // $this->View->render('gallery/index', array('images' -> $imgs));
+    public function showFiles($imagePath) {
+        GalleryModel::showImage($imagePath);
     }
 }

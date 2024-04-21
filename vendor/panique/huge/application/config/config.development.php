@@ -44,6 +44,7 @@ return array(
      * Configuration for: Avatar paths
      * Internal path to save avatars. Make sure this folder is writable. The slash at the end is VERY important!
      */
+    'PATH_TEST' => realpath(dirname(__FILE__).'/../../galFolder/') . '',
     'PATH_AVATARS' => realpath(dirname(__FILE__).'/../../') . '/public/avatars/',
     'PATH_AVATARS_PUBLIC' => 'avatars/',
     /**

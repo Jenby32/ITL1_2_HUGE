@@ -42,10 +42,8 @@ input[type="submit"] {
         <?php $this->renderFeedbackMessages(); ?>
         <form method="post" action="<?php echo Config::get('URL');?>chat/getMessages">
         <?php foreach($this->users as $user) {
-            // Initialisiere den Zähler für ungelesene Nachrichten
             $unreadCount = 0;
 
-            // Durchlaufe das Array der ungelesenen Nachrichten, um die Anzahl der ungelesenen Nachrichten für diesen Benutzer zu finden
             foreach ($this->unreadMessages as $message) {
                 if ($message->user_id_sender == $user->user_id) {
                     $unreadCount += $message->unread;
